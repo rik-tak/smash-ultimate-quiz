@@ -16,7 +16,14 @@ function Home()  {
           </button>
         </Link>
         <span className="text-center">
-          制作: @roknao
+          Created by <a href="https://twitter.com/roknao" className="no-underline hover:underline text-blue-600" target="_blank" rel="noopener noreferrer">
+                        @roknao
+                      </a>
+        </span>
+        <span className="text-center">
+          <a href="https://github.com/rik-tak/smash-ultimate-quiz" className="no-underline hover:underline text-blue-600" target="_blank" rel="noopener noreferrer">
+            rik-tak/smash-ultimate-quiz
+          </a>
         </span>
       </div>
     </div>

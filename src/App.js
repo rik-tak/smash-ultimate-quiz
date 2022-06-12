@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./components/Home";
 import QuizBoard from "./components/QuizBoard";
+import Quiz from "./components/Quiz";
 
 
 function App()  {
@@ -9,7 +10,8 @@ function App()  {
     <BrowserRouter>
       <Routes>
         <Route path={`/`} element={<Home />} />
-        <Route path={`/quiz/`} element={<QuizBoard />} />
+        <Route path={`/weight-quiz/`} element={<Quiz quizType="weight" />} />
+        <Route path={`/block-frame-quiz/`} element={<Quiz quizType="blockFrame" />} />
       </Routes>
     </BrowserRouter>
   );

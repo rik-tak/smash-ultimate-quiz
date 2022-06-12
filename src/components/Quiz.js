@@ -5,9 +5,22 @@ import db from "../firebase";
 import { Link } from "react-router-dom";
 
 import { getRandomInt } from "../utils";
+import { ATTACK_NAME_JA } from "../constants";
 
 
-function Quiz()  {
+function Quiz(props)  {
+  let funcGetQuiz;
+  switch (props.quizType) {
+    case "weight":
+      funcGetQuiz = getWeightQuiz;
+      break;
+    case "blockFrame":
+      funcGetQuiz = getBlockFrameQuiz;
+      break;
+    default:
+      console.log("Error: Quiz type is not defined.");
+      break;
+  }
   const [quizSentence, setQuizSentence] = useState("");
   const [score, setScore] = useState(0);
   const [answer, setAnswer] = useState(0);
@@ -41,16 +54,17 @@ function Quiz()  {
     const fighterName = data.name;
     delete data.name;
     const numAttacks = Object.keys(data).length
-    const attackId = getRandomInt(0, numAttacks);
-    const attackName = Object.keys(data)[attackId];
+    const attackIndex = getRandomInt(0, numAttacks);
+    const attackKey = Object.keys(data)[attackIndex];
+    const attackName = ATTACK_NAME_JA[attackKey];
 
     const quizSentence = fighterName + "の" + attackName + "のガード硬直差は？";
-    const quizAnswerValue = data[attackName].blockFrame;
+    const quizAnswerValue = data[attackKey].blockFrame;
     return [quizSentence, quizAnswerValue];
   }
 
   function loadQuiz() {
-    getBlockFrameQuiz().then(res => {
+    funcGetQuiz().then(res => {
       const quizSentence = res[0];
       const quizAnswerValue = res[1];
       setQuizSentence(quizSentence);
@@ -121,14 +135,23 @@ function Quiz()  {
   }
 
   return (
-    <div className="grid grid-cols-1 grid-rows-3 gap-2">
-      <span className="block text-gray-700 text-center bg-gray-200 px-4 py-2 mt-2">{quizSentence}</span>
-      <div className="grid grid-cols-2 grid-rows-2 gap-2">
-        {[0, 1, 2, 3].map((num) =>
-          <ButtonChoice buttonNumber={num} key={num} />
-        )}
+    <div className="min-h-screen bg-green-50 py-6 flex flex-col justify-center relative overflow-hidden">
+      <div className="relative pt-10 pb-8 bg-white shadow-xl ring-1 ring-gray-900/5 max-w-lg mx-auto rounded-lg px-10 w-64">
+        <div className="grid grid-cols-1 grid-rows-3 gap-2">
+          <span className="block text-gray-700 text-center bg-gray-200 px-4 py-2 mt-2">{quizSentence}</span>
+          <div className="grid grid-cols-2 grid-rows-2 gap-2">
+            {[0, 1, 2, 3].map((num) =>
+              <ButtonChoice buttonNumber={num} key={num} />
+            )}
+          </div>
+          <span className="block text-gray-700 text-center bg-gray-200 px-4 py-2 mt-2">{info}</span>
+        </div>
+        <Link to="/">
+          <button variant="contained" className="btn-pill btn-blue">
+            戻る
+          </button>
+        </Link>
       </div>
-      <span className="block text-gray-700 text-center bg-gray-200 px-4 py-2 mt-2">{info}</span>
     </div>
   );
 }

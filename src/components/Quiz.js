@@ -8,7 +8,7 @@ import { getRandomInt } from "../utils";
 
 
 function Quiz()  {
-  const [name, setName] = useState("");
+  const [quizSentence, setQuizSentence] = useState("");
   const [score, setScore] = useState(0);
   const [answer, setAnswer] = useState(0);
   const [quizCount, setQuizCount] = useState(0);
@@ -18,29 +18,37 @@ function Quiz()  {
   const [openAnswer, setOpenAnswer] = useState(false);
   const [info, setInfo] = useState("");
 
-  async function getFighterInfo() {
-    var fighterId = getRandomInt(0, 89);
-    fighterId = ('00' + fighterId).slice(-2);
-    const docRef = doc(db, "fighter-basic-info", fighterId);
+  async function getDataFromFirestore(collectionName, docName) {
+    const docRef = doc(db, collectionName, docName);
     const docSnap = await getDoc(docRef);
     const data = docSnap.data();
-    return data;
+    return data
+  }
+
+  async function getWeightQuiz() {
+    var fighterId = getRandomInt(0, 89);
+    fighterId = ('00' + fighterId).slice(-2);
+    const data = await getDataFromFirestore("fighter-basic-info", fighterId)
+    const quizSentence = data.name + "の体重は？";
+    const quizAnswerValue = data.weight;
+    return [quizSentence, quizAnswerValue];
   }
 
   function loadQuiz() {
-    getFighterInfo().then(fighter => {
-      const newName = fighter.name;
-      setName(newName);
+    getWeightQuiz().then(res => {
+      const quizSentence = res[0];
+      const quizAnswerValue = res[1];
+      setQuizSentence(quizSentence);
+
       const newAnswer = getRandomInt(0, 4);
       setAnswer(newAnswer);
       const newChoice = [0, 0, 0, 0];
-      const answerValue = fighter.weight;
-      newChoice[newAnswer] = answerValue;
+      newChoice[newAnswer] = quizAnswerValue;
       for (var i=0; i<4; i++) {
         while(i!==newAnswer) {
           const offset = getRandomInt(-5, 6);
-          if (!newChoice.includes(answerValue + offset)) {
-            newChoice[i] = answerValue + offset;
+          if (!newChoice.includes(quizAnswerValue + offset)) {
+            newChoice[i] = quizAnswerValue + offset;
             break;
           }
         }
@@ -98,7 +106,7 @@ function Quiz()  {
 
   return (
     <div className="grid grid-cols-1 grid-rows-3 gap-2">
-      <span className="block text-gray-700 text-center bg-gray-200 px-4 py-2 mt-2">{name}の体重は？</span>
+      <span className="block text-gray-700 text-center bg-gray-200 px-4 py-2 mt-2">{quizSentence}</span>
       <div className="grid grid-cols-2 grid-rows-2 gap-2">
         {[0, 1, 2, 3].map((num) =>
           <ButtonChoice buttonNumber={num} key={num} />

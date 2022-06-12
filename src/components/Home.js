@@ -17,7 +17,7 @@ function Home()  {
         </Link>
         <Link to="/block-frame-quiz" className="mx-auto">
           <button className="btn btn-blue">
-            ガード硬直差クイズ
+            ガード硬直差クイズ (仮)
           </button>
         </Link>
         <span className="text-center">

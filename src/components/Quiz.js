@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { getRandomInt } from "../utils";
 
 
-function WeightQuiz()  {
+function Quiz()  {
   const [name, setName] = useState("");
   const [score, setScore] = useState(0);
   const [answer, setAnswer] = useState(0);
@@ -109,4 +109,4 @@ function WeightQuiz()  {
   );
 }
 
-export default WeightQuiz;
+export default Quiz;

@@ -34,8 +34,23 @@ function Quiz()  {
     return [quizSentence, quizAnswerValue];
   }
 
+  async function getBlockFrameQuiz() {
+    var fighterId = getRandomInt(0, 81);
+    fighterId = ('00' + fighterId).slice(-2);
+    var data = await getDataFromFirestore("attack-data", fighterId)
+    const fighterName = data.name;
+    delete data.name;
+    const numAttacks = Object.keys(data).length
+    const attackId = getRandomInt(0, numAttacks);
+    const attackName = Object.keys(data)[attackId];
+
+    const quizSentence = fighterName + "の" + attackName + "のガード硬直差は？";
+    const quizAnswerValue = data[attackName].blockFrame;
+    return [quizSentence, quizAnswerValue];
+  }
+
   function loadQuiz() {
-    getWeightQuiz().then(res => {
+    getBlockFrameQuiz().then(res => {
       const quizSentence = res[0];
       const quizAnswerValue = res[1];
       setQuizSentence(quizSentence);
@@ -47,8 +62,9 @@ function Quiz()  {
       for (var i=0; i<4; i++) {
         while(i!==newAnswer) {
           const offset = getRandomInt(-5, 6);
-          if (!newChoice.includes(quizAnswerValue + offset)) {
-            newChoice[i] = quizAnswerValue + offset;
+          const dummyAnswerValue = quizAnswerValue + offset;
+          if (!newChoice.includes(dummyAnswerValue)) {
+            newChoice[i] = dummyAnswerValue;
             break;
           }
         }

@@ -20,4 +20,4 @@
 - [Ultimate Frame Data](https://ultimateframedata.com) by [MetalMusicMan](https://twitter.com/MetalMusicMan_)
 
 ## 連絡先
-不具合・要望などがあれば [issueを書く](https://github.com/rik-tak/smash-ultimate-quiz/issues) か [TwitterにDM](https://twitter.com/roknao) してください。
+不具合・要望などがあれば[TwitterにDM](https://twitter.com/roknao)してください。
